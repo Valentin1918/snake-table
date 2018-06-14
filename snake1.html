@@ -70,20 +70,6 @@
         return acc;
       }, []));
 
-  const rotateNet = myArr =>
-    myArr[0].map((col, ii, ar) =>
-      myArr.reduce((acc, row) => {
-        acc.push(row[ar.length - 1 - ii]);
-        return acc;
-      }, []));
-
-  const rotateRight = myArr =>
-    myArr[0].map((col, i) =>
-      myArr.map(row => {
-        // console.log('row[i]', row[i]);
-        return row[i];
-      }).reverse());
-
   const handle = {
     rise: () => {
       for (let i = maxValue - 1; i > 0; i--) {
@@ -104,52 +90,6 @@
   if (directionRight) myArr = myArr.map(v => [...v].reverse());
   console.log('myArr', myArr);
   console.timeEnd('shlapa');
-
-
-
-  console.time('shlapa1');
-  let result = [[]];
-  for (let i = 1; i <= maxValue; i++) {
-    const resL = result.length;
-    result[resL - 1].push(i);
-    const last = result[resL - 1][result[resL - 1].length - 1];
-    if (checkArrRise.includes(last) && last !== maxValue) result.push([]);
-  }
-
-  result = result.reduce((acc, v, i) => {
-    acc[i%2].push(acc[i%2].length%2 ? v.reverse() : v);
-    while (acc[i%2][acc[i%2].length - 1].length < number) {
-      if (number%2) {
-        if (i%2) acc[i%2][acc[i%2].length - 1].length%2 ? acc[i%2][acc[i%2].length - 1].push(undefined): acc[i%2][acc[i%2].length - 1].unshift(undefined);
-        if (!(i%2)) acc[i%2][acc[i%2].length - 1].length%2 ? acc[i%2][acc[i%2].length - 1].unshift(undefined): acc[i%2][acc[i%2].length - 1].push(undefined);
-      } else {
-        if (!(i%2)) acc[i%2][acc[i%2].length - 1].length%2 ? acc[i%2][acc[i%2].length - 1].push(undefined): acc[i%2][acc[i%2].length - 1].unshift(undefined);
-        if (i%2) acc[i%2][acc[i%2].length - 1].length%2 ? acc[i%2][acc[i%2].length - 1].unshift(undefined): acc[i%2][acc[i%2].length - 1].push(undefined);
-      }
-    }
-    return acc;
-  }, [[],[]]);
-
-  result[1].push(new Array(number));
-
-  const rangeArr = arr => arr.reduce((acc, v, i) => {
-    if (i%2) acc.unshift(...arr.splice(i, 1, undefined));
-    return acc;
-  }, []);
-
-  const updateRange = arr => {
-    const halfRes = rangeArr(arr);
-    return [...arr, ...halfRes].filter(e => e);
-  };
-
-  result[0] = updateRange(result[0]);
-  result[1] = rotateRight(updateRange(result[1]));
-
-  result = result[0].map((v, x) => v.map((w, y) => w || result[1][x][y]));
-
-  console.log('result', result);
-  console.timeEnd('shlapa1');
-
 
   document.addEventListener("DOMContentLoaded", function() {
     const table = document.getElementById('table');
