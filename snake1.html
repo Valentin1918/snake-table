@@ -85,9 +85,11 @@
     },
   };
 
+  console.time('shlapa');
   handle[type]();
   if (directionRight) myArr = myArr.map(v => [...v].reverse());
-  // console.log('myArr', myArr);
+  console.log('myArr', myArr);
+  console.timeEnd('shlapa');
 
   document.addEventListener("DOMContentLoaded", function() {
     const table = document.getElementById('table');
