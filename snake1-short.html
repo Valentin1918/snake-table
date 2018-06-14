@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Snake</title>
+  <link type="text/css" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
+</head>
+<body>
+
+<script>
+  const getQueryParams = () => {
+    const params = {};
+    const query = location.search.substring(1);
+    const vars = query.split('&');
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split('=');
+      if (typeof params[pair[0]] === 'undefined') {
+        params[pair[0]] = decodeURIComponent(pair[1]);
+      } else if (typeof params[pair[0]] === 'string') {
+        params[pair[0]] = [params[pair[0]], decodeURIComponent(pair[1])];
+      } else {
+        params[pair[0]].push(decodeURIComponent(pair[1]));
+      }
+    }
+    return params;
+  };
+
+  const params = getQueryParams();
+
+  function fillSpiralMatrix(n) {
+    const number = +n;
+    const maxValue = number ** 2;
+    const initMatrix = [[maxValue]];
+
+    const add = (a, b) => a + b;
+
+    const makeRotateArrRise = n => {
+      const reply = [n];
+      for (let i = n - 1; i > 0; i--) {
+        reply.push(i, i);
+      }
+      return reply.map((v, i) => {
+        const partArr = reply.slice(0, i + 1);
+        return partArr.reduce(add, 0);
+      })
+    };
+
+    const checkArrRise = makeRotateArrRise(number);
+
+    const rotate = myArr =>
+      myArr[0].map((col, ii, ar) =>
+        myArr.reduce((acc, row) => {
+          if (row[ar.length - 1 - ii]) acc.push(row[ar.length - 1 - ii]);
+          return acc;
+        }, []));
+
+    const handleRise = myArr => {
+      for (let i = maxValue - 1; i > 0; i--) {
+        myArr[0].push(i);
+        if (checkArrRise.includes(i)) myArr = rotate(myArr);
+      }
+      return myArr;
+    };
+
+    return handleRise(initMatrix).map(v => [...v].reverse());
+  }
+
+  console.time('shlapa');
+  const myArr = fillSpiralMatrix(+params.n);
+  console.log('myArr', myArr);
+  console.timeEnd('shlapa');
+
+  // document.addEventListener("DOMContentLoaded", function() {
+  //   const table = document.getElementById('table');
+  //   const makeText = text => document.createTextNode(text);
+  //
+  //   myArr.forEach(v => {
+  //     const tr = document.createElement('tr');
+  //     v.forEach(w => {
+  //       const td = document.createElement('td');
+  //       td.append(makeText(w));
+  //       tr.append(td);
+  //     });
+  //     table.append(tr);
+  //   });
+  // });
+
+</script>
+<table class="table table-bordered" id="table" />
+</body>
+</html>
